@@ -66,7 +66,11 @@ def generate_detection_results(input_dir, output_dir):
         )
     ):
         # read data:
-        label = pd.read_csv(input_filename, sep=' ', header=None)
+        try:
+            label = pd.read_csv(input_filename, sep=' ', header=None)
+        except:
+            continue
+            
         label.columns = [
             'category',
             'truncation', 'occlusion', 
@@ -84,7 +88,8 @@ def generate_detection_results(input_dir, output_dir):
             output_dir, 'data', os.path.basename(input_filename)
         )
         idx = label.groupby(['category'])['score'].transform(max) == label['score']
-        label[idx].to_csv(output_filename, sep=' ', header=False, index=False)
+        if len(idx) > 0:
+            label[idx].to_csv(output_filename, sep=' ', header=False, index=False)
 
 def get_arguments():
     """ 
