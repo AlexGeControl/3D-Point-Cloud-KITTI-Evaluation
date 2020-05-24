@@ -22,7 +22,7 @@ def get_model_detections(input_dir, model_dir, output_dir):
     kitti_dataset = kitti_ds.KittiDataset(
         root_path = input_dir,
         info_path = os.path.join(input_dir, 'kitti_infos_val.pkl'),
-        class_names = ['Car', 'Pedestrian', 'Cyclist'], 
+        class_names = ['Pedestrian', 'Cyclist'] #['Car', 'Pedestrian', 'Cyclist'], 
     )
 
     # load detection results:
@@ -36,7 +36,7 @@ def get_model_detections(input_dir, model_dir, output_dir):
         model_dir, 'results', latest_checkpoint, 'result.pkl'
     )
 
-    print('[Point Pillar Evaluation]: load detections...')
+    print(f'[Point Pillar Evaluation]: load detections {latest_result}...')
     with open(latest_result, 'rb') as f:
         detections = pickle.load(f)
 
@@ -83,7 +83,8 @@ def generate_detection_results(input_dir, output_dir):
         output_filename = os.path.join(
             output_dir, 'data', os.path.basename(input_filename)
         )
-        label[label['score'] == label['score'].max()].to_csv(output_filename, sep=' ', header=False, index=False)
+        idx = label.groupby(['category'])['score'].transform(max) == label['score']
+        label[idx].to_csv(output_filename, sep=' ', header=False, index=False)
 
 def get_arguments():
     """ 
