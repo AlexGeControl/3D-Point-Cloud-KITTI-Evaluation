@@ -22,7 +22,7 @@ def get_model_detections(input_dir, model_dir, output_dir):
     kitti_dataset = kitti_ds.KittiDataset(
         root_path = input_dir,
         info_path = os.path.join(input_dir, 'kitti_infos_val.pkl'),
-        class_names = ['Pedestrian', 'Cyclist'] #['Car', 'Pedestrian', 'Cyclist'], 
+        class_names = ['Cyclist', 'Pedestrian'] #['Car', 'Pedestrian', 'Cyclist'], 
     )
 
     # load detection results:
